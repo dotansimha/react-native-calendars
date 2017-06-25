@@ -157,7 +157,7 @@ class Calendar extends Component {
         dayComp = (<View key={id} style={{ width: 32 }} />);
       }
     } else if (this.props.renderDay) {
-      dayComp = this.props.renderDay(day.getDate(), state, id, this.pressDay.bind(this, day), this.getDateMarking(day), this.props.theme, markingExists);
+      dayComp = this.props.renderDay(day, day.getDate(), state, id, this.pressDay.bind(this, day), this.getDateMarking(day), this.props.theme, markingExists);
     } else {
       const DayComp = this.props.markingType === 'interactive' ? UnitDay : Day;
       dayComp = (
