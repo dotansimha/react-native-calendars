@@ -83,6 +83,7 @@ class CalendarList extends Component {
           firstDay={this.props.firstDay}
           monthFormat={this.props.monthFormat}
           renderDay={this.props.renderDay}
+          renderHeader={this.props.renderHeader}
         />);
     } else {
       const text = row.toString();

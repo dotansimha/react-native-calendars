@@ -55,6 +55,8 @@ class Calendar extends Component {
     renderArrow: PropTypes.func,
     // Replace default render day function, callback is called with
     renderDay: PropTypes.func,
+    // Replace default render header function, callback is called with
+    renderHeader: PropTypes.func,
     // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
     monthFormat: PropTypes.string
   };
@@ -215,16 +217,28 @@ class Calendar extends Component {
     }
     return (
       <View style={[this.style.container, this.props.style]}>
-        <CalendarHeader
-          theme={this.props.theme}
-          hideArrows={this.props.hideArrows}
-          month={this.state.currentMonth}
-          addMonth={this.addMonth}
-          showIndicator={indicator}
-          firstDay={this.props.firstDay}
-          renderArrow={this.props.renderArrow}
-          monthFormat={this.props.monthFormat}
-        />
+        {
+          this.props.renderHeader ? this.props.renderHeader(
+            this.state.currentMonth,
+            this.addMonth,
+            this.props.firstDay,
+            this.props.monthFormat,
+            this.props.hideArrows,
+            this.props.theme,
+            this.props.renderArrow,
+          ) : (
+            <CalendarHeader
+              theme={this.props.theme}
+              hideArrows={this.props.hideArrows}
+              month={this.state.currentMonth}
+              addMonth={this.addMonth}
+              showIndicator={indicator}
+              firstDay={this.props.firstDay}
+              renderArrow={this.props.renderArrow}
+              monthFormat={this.props.monthFormat}
+            />
+          )
+        }
         {weeks}
       </View>);
   }
