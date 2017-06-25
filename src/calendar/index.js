@@ -53,6 +53,8 @@ class Calendar extends Component {
     onVisibleMonthsChange: PropTypes.func,
     // Replace default arrows with custom ones (direction can be 'left' or 'right')
     renderArrow: PropTypes.func,
+    // Replace default render day function, callback is called with
+    renderDay: PropTypes.func,
     // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
     monthFormat: PropTypes.string
   };
@@ -146,15 +148,18 @@ class Calendar extends Component {
       state = 'today';
     }
     let dayComp;
+    const markingExists = this.props.markedDates ? true : false;
+
     if (!dateutils.sameMonth(day, this.state.currentMonth) && this.props.hideExtraDays) {
       if (this.props.markingType === 'interactive') {
-        dayComp = (<View key={id} style={{flex: 1}}/>);
+        dayComp = (<View key={id} style={{ flex: 1 }} />);
       } else {
-        dayComp = (<View key={id} style={{width: 32}}/>);
+        dayComp = (<View key={id} style={{ width: 32 }} />);
       }
+    } else if (this.props.renderDay) {
+      dayComp = this.props.renderDay(day.getDate(), state, id, this.pressDay.bind(this, day), this.getDateMarking(day), this.props.theme, markingExists);
     } else {
       const DayComp = this.props.markingType === 'interactive' ? UnitDay : Day;
-      const markingExists = this.props.markedDates ? true : false;
       dayComp = (
         <DayComp
             key={id}
@@ -168,6 +173,7 @@ class Calendar extends Component {
           </DayComp>
         );
     }
+
     return dayComp;
   }
 
