@@ -13,7 +13,8 @@ import styleConstructor from './style';
 import dateutils from '../dateutils';
 import Calendar from '../calendar';
 
-const calendarHeight = 360;
+const DEFAULT_CALENDAR_HEIGHT = 360;
+
 class CalendarList extends Component {
   static propTypes = {
     ...Calendar.propTypes,
@@ -26,6 +27,9 @@ class CalendarList extends Component {
 
     // Enable or disable scrolling of calendar list
     scrollEnabled: PropTypes.bool,
+
+    // override default calendar height
+    calendarHeight: PropTypes.number,
   };
 
   constructor(props) {
@@ -63,13 +67,17 @@ class CalendarList extends Component {
     this.lastScrollPosition = -1000;
   }
 
+  _getHeight() {
+    return this.props.calendarHeight || DEFAULT_CALENDAR_HEIGHT;
+  }
+
   renderCalendar(row) {
     if (row.getTime) {
       return (
         <Calendar
           theme={this.props.theme}
           selected={this.props.selected}
-          style={[{height: calendarHeight}, this.style.calendar]}
+          style={[{height: this._getHeight()}, this.style.calendar]}
           current={row}
           hideArrows
           hideExtraDays={this.props.hideExtraDays === undefined ? true : this.props.hideExtraDays}
@@ -88,7 +96,7 @@ class CalendarList extends Component {
     } else {
       const text = row.toString();
       return (
-        <View style={[{height: calendarHeight}, this.style.placeholder]}>
+        <View style={[{height: this._getHeight()}, this.style.placeholder]}>
           <Text style={this.style.placeholderText}>{text}</Text>
         </View>
       );
@@ -98,7 +106,7 @@ class CalendarList extends Component {
   scrollToDay(d, offset, animated) {
     const day = parseDate(d);
     const diffMonths = Math.round(this.state.openDate.clone().setDate(1).diffMonths(day.clone().setDate(1)));
-    let scrollAmount = (calendarHeight * this.pastScrollRange) + (diffMonths * calendarHeight) + (offset || 0);
+    let scrollAmount = (this._getHeight() * this.pastScrollRange) + (diffMonths * this._getHeight()) + (offset || 0);
     let week = 0;
     const days = dateutils.page(day, this.props.firstDay);
     for (let i = 0; i < days.length; i++) {
@@ -116,7 +124,7 @@ class CalendarList extends Component {
     const scrollTo = month || this.state.openDate;
     let diffMonths = this.state.openDate.diffMonths(scrollTo);
     diffMonths = diffMonths < 0 ? Math.ceil(diffMonths) : Math.floor(diffMonths);
-    const scrollAmount = (calendarHeight * this.pastScrollRange) + (diffMonths * calendarHeight);
+    const scrollAmount = (this._getHeight() * this.pastScrollRange) + (diffMonths * this._getHeight());
     //console.log(month, this.state.openDate);
     //console.log(scrollAmount, diffMonths);
     this.listView.scrollTo({x: 0, y: scrollAmount, animated: false});
@@ -197,15 +205,15 @@ class CalendarList extends Component {
       });
     }
     const yOffset = event.nativeEvent.contentOffset.y;
-    if (Math.abs(yOffset - this.lastScrollPosition) > calendarHeight) {
+    if (Math.abs(yOffset - this.lastScrollPosition) > this._getHeight()) {
       this.lastScrollPosition = yOffset;
       const visibleMonths = [];
       const newrows = [];
       const rows = this.state.rows;
       for (let i = 0; i < rows.length; i++) {
         let val = rows[i];
-        const rowStart = i * calendarHeight;
-        const rowShouldBeRendered = Math.abs(rowStart - yOffset) < calendarHeight * 2;
+        const rowStart = i * this._getHeight();
+        const rowShouldBeRendered = Math.abs(rowStart - yOffset) < this._getHeight() * 2;
         if (rowShouldBeRendered && !val.getTime) {
           val = this.state.openDate.clone().addMonths(i - this.pastScrollRange, true);
           //console.log(val, i);
@@ -249,11 +257,9 @@ class CalendarList extends Component {
         style={[this.style.container, this.props.style]}
         initialListSize={this.pastScrollRange * this.futureScrollRange + 1}
         dataSource={this.state.dataSource}
-        scrollRenderAheadDistance={calendarHeight}
-                //snapToAlignment='start'
-                //snapToInterval={calendarHeight}
+        scrollRenderAheadDistance={this._getHeight()}
         pageSize={1}
-        removeClippedSubviews
+        removeClippedSubviews={false}
         onChangeVisibleRows={this.visibleRowsChange.bind(this)}
         renderRow={this.renderCalendar.bind(this)}
         showsVerticalScrollIndicator={false}
