@@ -169,7 +169,13 @@ The loading indicator next to month name will be displayed if `<Calendar />` has
     dotColor: '#00adf5',
     selectedDotColor: '#ffffff',
     arrowColor: 'orange',
-    monthTextColor: 'blue'
+    monthTextColor: 'blue',
+    textDayFontFamily: 'monospace',
+    textMonthFontFamily: 'monospace',
+    textDayHeaderFontFamily: 'monospace',
+    textDayFontSize: 16,
+    textMonthFontSize: 16,
+    textDayHeaderFontSize: 16
   }}
 />
 ```
@@ -215,7 +221,7 @@ An advanced agenda component that can display interactive listings for calendar 
      '2012-05-25': [{text: 'item 3 - any js object'},{text: 'any js object'}],
     }}
   // callback that gets called when items for a certain month should be loaded (month became visible)
-  loadItemsForMonth={(mongh) => {console.log('trigger items loading')}}
+  loadItemsForMonth={(month) => {console.log('trigger items loading')}}
   // callback that gets called on day press
   onDayPress={(day)=>{console.log('day pressed')}}
   // callback that gets called when day changes while scrolling agenda list
@@ -233,14 +239,14 @@ An advanced agenda component that can display interactive listings for calendar 
   // Hide knob button. Default = false
   hideKnob={true}
   // agenda theme
-  theme = {{
+  theme={{
     ...calendarTheme,
-    agendaDayTextColor = 'yellow',
-    agendaDayNumColor = 'green',
-    agendaTodayColor = 'red'
+    agendaDayTextColor: 'yellow',
+    agendaDayNumColor: 'green',
+    agendaTodayColor: 'red'
   }}
   // agenda container style
-  style = {{}}
+  style={{}}
 />
 ```
 

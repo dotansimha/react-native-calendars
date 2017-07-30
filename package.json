@@ -1,6 +1,6 @@
 {
   "name": "react-native-calendars",
-  "version": "1.4.0",
+  "version": "1.5.5",
   "main": "src/index.js",
   "description": "React Native Calendar Components",
   "scripts": {
@@ -19,10 +19,6 @@
   "dependencies": {
     "prop-types": "^15.5.10",
     "xdate": "^0.8.0"
-  },
-  "peerDependencies": {
-    "react": "16.0.0-alpha.6",
-    "react-native": "0.44.0"
   },
   "devDependencies": {
     "eslint": "^3.19.0",
