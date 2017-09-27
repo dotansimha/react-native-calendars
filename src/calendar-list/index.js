@@ -71,6 +71,12 @@ class CalendarList extends Component {
     return this.props.calendarHeight || DEFAULT_CALENDAR_HEIGHT;
   }
 
+  refresh() {
+    this.setState({
+      rows: this.state.rows,
+    });
+  }
+
   renderCalendar(row) {
     if (row.getTime) {
       return (
