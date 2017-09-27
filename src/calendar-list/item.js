@@ -12,11 +12,13 @@ class CalendarListItem extends Component {
   shouldComponentUpdate(nextProps) {
     const r1 = this.props.item;
     const r2 = nextProps.item;
+
     return r1.toString('yyyy MM') !== r2.toString('yyyy MM') || !!(r2.propbump && r2.propbump !== r1.propbump);
   }
 
   render() {
     const row = this.props.item;
+
     if (row.getTime) {
       return (
         <Calendar
@@ -25,6 +27,8 @@ class CalendarListItem extends Component {
           style={[{height: this.props.calendarHeight}, this.style.calendar]}
           current={row}
           hideArrows
+          renderDay={this.props.renderDay}
+          renderHeader={this.props.renderHeader}
           hideExtraDays={this.props.hideExtraDays === undefined ? true : this.props.hideExtraDays}
           disableMonthChange
           markedDates={this.props.markedDates}
@@ -38,6 +42,7 @@ class CalendarListItem extends Component {
         />);
     } else {
       const text = row.toString();
+
       return (
         <View style={[{height: this.props.calendarHeight}, this.style.placeholder]}>
           <Text style={this.style.placeholderText}>{text}</Text>
